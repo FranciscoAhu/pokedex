@@ -14,7 +14,24 @@ tinymce.init({
     'removeformat | help',
     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
   });
-  
+  const enviarProfeOak = async function(){
+    let nro = this.nro;
+    let res = await Swal.fire({
+      title: "¿Desea realmente continuar?",
+      text: "Está intentando enviar el pokemon al profesor Oak, esto no se puede revertir",
+      icon: "warning",
+      showCancelButton:true,
+      confirmButtonText: "Sí! Hazlo!"
+    });
+    if (res.isConfirmed){
+      pokemones.splice(nro,1);
+      cargarTabla();
+      Swal.fire("Pokemon Descartado","Pokemon enviado al profesor","info");
+    }else{
+      Swal.fire("No se ha eliminado","El pokemon no ha sido eliminado","error");
+    }
+    
+  }
   const pokemones = [];//Definir arreglo
   const cargarTabla = ()=>{
     let tbody = document.querySelector("#tbody-tabla");
@@ -53,6 +70,15 @@ tinymce.init({
       tdTipo.appendChild(tipo);
       tdTipo.classList.add("text-center")
       tdDesc.innerHTML =p.descripcion;
+
+      let boton = document.createElement("button");
+      boton.classList.add("btn","btn-danger");
+      boton.innerText="Enviar al profesor Oak";
+      boton.nro=i;
+      tdAcciones.appendChild(boton);
+      tdAcciones.classList.add("text-cemter");
+      
+      boton.addEventListener("click",enviarProfeOak);
 
       tr.appendChild(tdNro);
       tr.appendChild(tdNombre);
